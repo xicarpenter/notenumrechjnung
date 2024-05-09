@@ -1,0 +1,227 @@
+\ProvidesPackage{tntdasa}
+\RequirePackage{scrlayer-scrpage}
+\RequirePackage{ifthen}
+\RequirePackage{typearea}
+\RequirePackage{amsmath,amssymb}
+\RequirePackage{xcolor}  % meuel, 2016-06-24
+\RequirePackage{caption}
+\RequirePackage{subfig}
+\RequirePackage{paralist} % compactitem, compactenum
+\RequirePackage{esvect} % improved vectors with \vv{} (instead \vec{} / \overrightarrow
+\RequirePackage{nicefrac}
+\RequirePackage{units}
+\RequirePackage{graphicx}
+%\DeclareOption{pdftex}{\DeclareGraphicsExtensions{.pdf,.tif,.jpg,.mps,.png}}
+\DeclareOption{bibcomment}{\newcommand{\tntbibcomment}[1]{{\small \textit{#1}}}}
+
+\ProcessOptions
+\automark[section]{chapter}     % meuel, 2013-08-07: fix problems with undefined \headmark in scrreprt
+\defpagestyle{tntdasa}
+  {(0pt,0pt){\pagemark\hfill\headmark}
+            {\headmark\hfill\pagemark}
+            {\headmark\hfill\pagemark}(\textwidth,0.5pt)}
+  {(0pt,0pt){\hfill}
+            {\hfill}
+            {\hfill}(0pt,0pt)}
+\defpagestyle{tntnews}
+  {(\textwidth,0.5pt){\pagemark\hfill\headmark}
+            {\headmark\hfill\pagemark}
+            {\headmark\hfill\pagemark}(\textwidth,0.5pt)}
+  {(0pt,0pt){\hfill}
+            {\hfill}
+            {\hfill}(0pt,0pt)}
+
+%
+% Abstand zwischen den Absaetzen auf 1.5 Zeilen setzen
+%
+\setlength{\parskip}{1.5ex}
+%
+% Einzug am Absatzanfang auf 0 setzen.
+%
+\setlength{\parindent}{0em}
+\newcommand{\textcaption}[1]{\textit{#1}}
+%\typearea[0.5cm]{12}
+%
+% Titelseite
+%
+% \tntdasatitle{Diplom/Studienarbeit}
+%              {Titel}
+%              {Name des Studenten}
+%              {Betreuer}
+%              {Erstprüfer}
+%              {Zweitprüfer}
+%              {Ort,Datum}
+\newcommand{\tntdasatitle}[8]{
+\begin{titlepage}
+\enlargethispage{3cm}
+
+  \begin{center}
+    {\large \textsc{Gottfried Wilhelm Leibniz 
+    	    Universit\"at Hannover}}
+    
+    {\large \textsc{Institut f\"ur Informationsverarbeitung} }
+
+\vfill    
+
+     {\Large \textbf{#1}}
+
+\vfill
+
+    {\Large #2}
+   
+\vspace{1cm}    
+
+    {#3} \\
+
+
+\vfill    
+
+
+{    \begin{tabular}{ll}
+      Betreuer: & #4 \\
+      Erstpr\"ufer: & #5 \\
+      Zweitpr\"ufer: & #6
+    \end{tabular}}
+
+\vspace{1.0cm}
+
+    { #7}
+
+\vfill    
+\hrule
+\parbox{\textwidth}{
+Die Richtlinien im \emph{Merkblatt zur Ausführung von Abschlussarbeiten am Institut für \hbox{Informationsverarbeitung}} sind Bestandteil der Aufgabenstellung. 
+Eine anderweitige Verwendung der Arbeit, insbesondere die Bekanntgabe an Dritte, bedarf der Zustimmung des Erstprüfers.
+}
+\hrule
+
+\end{center}
+\setcounter{page}{0}
+\if@twoside 
+  \begin{titlepage} \ 
+  \setcounter{page}{0}
+  \end{titlepage} 
+\fi
+\end{titlepage}
+
+
+}
+%
+% Bilder einbinden
+%
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\floatpagefraction}{.9}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{.5}
+
+%
+% LaTeX-Bilder einbinden
+%
+% \tntlatexpic{bild.tex}{LABEL}{Eintrag Inhaltsverzeichnis}{Bildunterschrift}
+%
+\newcommand{\tntlatexpic}[4]
+{
+  \begin{figure*}[ht]
+    \begin{center}
+      \input{#1}
+    \end{center}
+    \ifthenelse{\equal{#3}{}}
+               {\caption{{\label{#2}\textcaption{#3}}}}
+               {\caption[#3]{{\label{#2}\textcaption{#4}}}}
+  \end{figure*}
+}
+%
+% EPS/PDF-Bilder einbinden
+%
+% \tntpic[Optionen]{bild.eps|pdf}{LABEL}{Eintrag Inhaltsverzeichnis}{Bildunterschrift}
+%
+\newcommand{\tntpic}[5][]
+{
+  \begin{figure*}[ht]
+    \begin{center}
+      \ifthenelse{\equal{#1}{}}
+                 {\includegraphics{#2}}
+                 {\includegraphics[#1]{#2}}
+    \end{center}
+    \ifthenelse{\equal{#4}{}}
+               {\caption{{\label{#3}\textcaption{#5}}}}
+               {\caption[#4]{{\label{#3}\textcaption{#5}}}}
+  \end{figure*}
+}
+%
+% EPS-Bilder einbinden
+%
+% \tntepspic[Optionen]{bild.eps}{LABEL}{Eintrag Inhaltsverzeichnis}{Bildunterschrift}
+%
+\newcommand{\tntepspic}[5][]
+{
+  \begin{figure*}[ht]
+    \begin{center}
+      \ifthenelse{\equal{#1}{}}
+                 {\includegraphics{#2}}
+                 {\includegraphics[#1]{#2}}
+    \end{center}
+    \ifthenelse{\equal{#4}{}}
+               {\caption{{\label{#3}\textcaption{#5}}}}
+               {\caption[#4]{{\label{#3}\textcaption{#5}}}}
+  \end{figure*}
+}
+%
+% EPS|PDF-Bilder einbinden (mit Rahmen)
+%
+% \tntfpic[Optionen]{bild.eps}{LABEL}{Eintrag Inhaltsverzeichnis}{Bildunterschrift}
+%
+\newcommand{\tntfpic}[5][]
+{
+  \begin{figure*}[ht]
+    \begin{center}
+      \fbox{%
+        \ifthenelse{\equal{#1}{}}
+                   {\includegraphics{#2}}
+                   {\includegraphics[#1]{#2}}%
+      }
+    \end{center}
+    \ifthenelse{\equal{#4}{}}
+               {\caption{{\label{#3}\textcaption{#5}}}}
+               {\caption[#4]{{\label{#3}\textcaption{#5}}}}
+  \end{figure*}
+}
+%
+% EPS-Bilder einbinden (mit Rahmen)
+%
+% \tntfepspic[Optionen]{bild.eps}{LABEL}{Eintrag Inhaltsverzeichnis}{Bildunterschrift}
+%
+\newcommand{\tntfepspic}[5][]
+{
+  \begin{figure*}[ht]
+    \begin{center}
+      \fbox{%
+        \ifthenelse{\equal{#1}{}}
+                   {\includegraphics{#2}}
+                   {\includegraphics[#1]{#2}}%
+      }
+    \end{center}
+    \ifthenelse{\equal{#4}{}}
+               {\caption{{\label{#3}\textcaption{#5}}}}
+               {\caption[#4]{{\label{#3}\textcaption{#5}}}}
+  \end{figure*}
+}
+%
+% Kommentare zur Literatur
+%
+\providecommand{\tntbibcomment}[1]{}
+%\tntbibitem[Label]{Schl\"ussel}{Autor(en)}{Titel}{Verlag}{Jahr}{Kommentar}
+\newcommand{\tntbibitem}[7][******]
+{
+\ifthenelse{\equal{#1}{******}}
+{\bibitem{#2}#3: #4. \\ #5, (#6).\\\tntbibcomment{#7}}
+{\bibitem[#1]{#2}#3: #4. \\ #5, (#6).\\\tntbibcomment{#7}}
+}
+
+% Umbruch
+\tolerance=2000
+\emergencystretch=20pt
+
+
+
+
